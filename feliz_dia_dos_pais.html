@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Feliz Dia dos Pais</title>
+<style>
+  :root{
+    --bg:#0f1724; --card:#0b1220; --accent:#ffb86b; --muted:#9aa5b1;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  body{
+    display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(255,184,107,0.06), transparent),
+      radial-gradient(900px 400px at 90% 90%, rgba(59,130,246,0.03), transparent),
+      var(--bg);
+    color:#e6eef6;
+    padding:24px;
+  }
+
+  .card{
+    width:min(920px,96vw);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:18px; padding:36px; box-shadow: 0 10px 30px rgba(2,6,23,0.7);
+    display:grid; grid-template-columns: 1fr 360px; gap:28px; align-items:center;
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+
+  @media (max-width:880px){
+    .card{grid-template-columns: 1fr; text-align:center}
+  }
+
+  .left h1{margin:0;font-size:2.1rem; letter-spacing: -0.02em;}
+  .left p{color:var(--muted); margin-top:12px; font-size:1rem; line-height:1.45}
+  .message{
+    margin-top:18px; background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:18px; border-radius:12px; font-size:1.05rem;
+  }
+
+  .controls{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap}
+  .btn{
+    background:linear-gradient(180deg,var(--accent), #ff9d3a);
+    border:none; padding:10px 14px; border-radius:10px; cursor:pointer; color:#06202a;
+    font-weight:700; box-shadow: 0 6px 18px rgba(255,184,107,0.14);
+  }
+  .btn.secondary{
+    background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); font-weight:600;
+  }
+
+  .right{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+
+  .portrait{
+    width:240px; height:240px; border-radius:20px; display:grid; place-items:center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    position:relative; overflow:hidden;
+  }
+  .portrait svg{width:55%; height:55%; opacity:0.95}
+  .small-note{color:var(--muted); font-size:0.9rem}
+
+  /* little decorative heart animation */
+  .heart{position:absolute; left:12px; bottom:10px; transform-origin:center; animation:beat 1.6s infinite;}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
+  /* confetti pieces */
+  .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden;}
+  .confetti .piece{
+    position:absolute; width:10px; height:14px; opacity:0.95; transform:translateY(-20vh) rotate(0deg);
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(120vh) rotate(720deg); opacity:1}
+  }
+
+  /* input */
+  label{display:block; font-size:0.85rem; color:var(--muted); margin-bottom:6px}
+  input[type="text"]{
+    width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04);
+    background:transparent; color:inherit; outline:none;
+  }
+
+  footer{grid-column:1 / -1; text-align:center; margin-top:6px; color:var(--muted); font-size:0.85rem}
+</style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="title">
+    <div class="left">
+      <h1 id="title">Feliz Dia dos Pais, <span id="dadName">Pai</span>! 🎉</h1>
+      <p>Um dia pra lembrar que todo gesto pequeno vira lembrança grande. Obrigado por tudo — amizade, conselho e força.</p>
+
+      <div class="message" id="messagePreview">Você é meu herói diário: obrigado por me ensinar a ser melhor. Hoje é seu dia — aproveite!</div>
+
+      <div class="controls">
+        <div style="min-width:220px">
+          <label for="name">Nome do seu pai</label>
+          <input id="name" type="text" placeholder="Digite o nome (ex: José)" />
+        </div>
+
+        <button class="btn" id="applyBtn">Atualizar Mensagem</button>
+        <button class="btn secondary" id="surpriseBtn">Mostrar Surpresa 🎁</button>
+        <button class="btn secondary" id="confettiBtn">Celebrar 🎊</button>
+      </div>
+    </div>
+
+    <div class="right" aria-hidden="false">
+      <div class="portrait" title="Meu pai">
+        <!-- simple svg illustration -->
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <rect x="0" y="0" width="512" height="512" fill="none"/>
+          <circle cx="256" cy="156" r="84" fill="#1f2937"/>
+          <path d="M128 396c0-84 88-140 128-140s128 56 128 140z" fill="#111827"/>
+        </svg>
+        <svg class="heart" viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
+          <path fill="#ff6b6b" d="M4 12 C4 7 8 4 12 6 C14 7 16 9 16 9 C16 9 18 7 20 6 C24 4 28 7 28 12 C28 20 16 26 16 26 C16 26 4 20 4 12 Z"/>
+        </svg>
+      </div>
+
+      <div class="small-note">Toque em "Atualizar Mensagem" para personalizar</div>
+    </div>
+
+    <footer>Feito com ❤️ — personalize e envie pro seu pai!</footer>
+  </div>
+
+  <div class="confetti" id="confettiArea" aria-hidden="true"></div>
+
+<script>
+  // DOM
+  const nameInput = document.getElementById('name');
+  const applyBtn = document.getElementById('applyBtn');
+  const dadName = document.getElementById('dadName');
+  const message = document.getElementById('messagePreview');
+  const surpriseBtn = document.getElementById('surpriseBtn');
+  const confettiBtn = document.getElementById('confettiBtn');
+  const confettiArea = document.getElementById('confettiArea');
+
+  // apply name
+  applyBtn.addEventListener('click', () => {
+    const name = (nameInput.value || 'Pai').trim();
+    dadName.textContent = name;
+    message.textContent = `Querido ${name}, obrigado por estar sempre comigo. Te amo muito. Feliz Dia dos Pais!`;
+    playChime();
+  });
+
+  // small generated "surprise" messages
+  const surprises = [
+    'Hoje tem almoço especial — você escolhe o cardápio!',
+    'Vale um abraço extra e uma conversa sem pressa.',
+    'Obrigado por cada conselho. Você me inspira.'
+  ];
+  surpriseBtn.addEventListener('click', () => {
+    const s = surprises[Math.floor(Math.random()*surprises.length)];
+    alert(s);
+    playChime();
+  });
+
+  // confetti generator
+  confettiBtn.addEventListener('click', () => {
+    launchConfetti(40);
+    playChime();
+  });
+
+  function launchConfetti(amount=30){
+    // remove old
+    confettiArea.innerHTML = '';
+    const colors = ['#ffb86b','#60a5fa','#34d399','#f472b6','#f59e0b'];
+    for(let i=0;i<amount;i++){
+      const el = document.createElement('div');
+      el.className = 'piece';
+      el.style.left = Math.random()*100 + 'vw';
+      el.style.background = colors[i % colors.length];
+      el.style.width = (6 + Math.random()*10) + 'px';
+      el.style.height = (8 + Math.random()*12) + 'px';
+      el.style.top = (-10 - Math.random()*20) + 'vh';
+      el.style.animationDuration = (2 + Math.random()*2.5) + 's';
+      el.style.transform = `translateY(-20vh) rotate(${Math.random()*360}deg)`;
+      confettiArea.appendChild(el);
+      // auto remove
+      setTimeout(()=> el.remove(), 6000);
+    }
+  }
+
+  // simple chime using Web Audio API
+  function playChime(){
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = 560;
+      o.connect(g);
+      g.connect(ctx.destination);
+      g.gain.setValueAtTime(0, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.1);
+      o.stop(ctx.currentTime + 1.2);
+    } catch(e){ /* autoplay blocked? ignore */ }
+  }
+
+  // allow pressing Enter in input to apply
+  nameInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') applyBtn.click(); });
+
+  // if ?name= is provided in URL, prefill
+  (function prefillFromQuery(){
+    const qs = new URLSearchParams(location.search);
+    const n = qs.get('name');
+    if(n){ nameInput.value = n; applyBtn.click(); }
+  })();
+</script>
+</body>
+</html>
