@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Feliz Dia dos Namorados</title>
+<style>
+  :root{
+    --bg:#330b12; --card:#4d141d; --accent:#ff476f; --muted:#c77b87;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  body{
+    display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(1200px 600px at 30% 25%, rgba(255,71,111,0.1), transparent),
+      radial-gradient(900px 400px at 80% 80%, rgba(77,20,29,0.07), transparent),
+      var(--bg);
+    color:#ffe7ec;
+    padding:24px;
+  }
+
+  .card{
+    width:min(920px,96vw);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:18px; padding:36px; box-shadow: 0 10px 30px rgba(77,20,29,0.9);
+    display:grid; grid-template-columns: 1fr 360px; gap:28px; align-items:center;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  @media (max-width:880px){
+    .card{grid-template-columns: 1fr; text-align:center}
+  }
+
+  .left h1{margin:0;font-size:2.1rem; letter-spacing: -0.02em;}
+  .left p{color:var(--muted); margin-top:12px; font-size:1rem; line-height:1.45}
+  .message{
+    margin-top:18px; background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:18px; border-radius:12px; font-size:1.05rem;
+  }
+
+  .controls{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+  .btn{
+    background:linear-gradient(180deg,var(--accent), #f93962);
+    border:none; padding:10px 14px; border-radius:10px; cursor:pointer; color:#3a0007;
+    font-weight:700; box-shadow: 0 6px 18px rgba(255,71,111,0.3);
+    min-width: 160px;
+  }
+  .btn.secondary{
+    background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); font-weight:600;
+  }
+
+  .right{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+
+  .portrait{
+    width:240px; height:240px; border-radius:20px; display:grid; place-items:center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    position:relative; overflow:hidden;
+  }
+  .portrait svg{width:55%; height:55%; opacity:0.9}
+
+  .small-note{color:var(--muted); font-size:0.9rem}
+
+  /* confetti */
+  .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden;}
+  .confetti .piece{
+    position:absolute; width:10px; height:14px; opacity:0.95; transform:translateY(-20vh) rotate(0deg);
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(120vh) rotate(720deg); opacity:1}
+  }
+
+  label{display:block; font-size:0.85rem; color:var(--muted); margin-bottom:6px}
+  input[type="text"]{
+    width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04);
+    background:transparent; color:inherit; outline:none;
+  }
+
+  footer{grid-column:1 / -1; text-align:center; margin-top:6px; color:var(--muted); font-size:0.85rem}
+</style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="title">
+    <div class="left">
+      <h1 id="title">Feliz Dia dos Namorados, <span id="loverName">Amor</span>! ❤️</h1>
+      <p>Um dia para celebrar o amor, a cumplicidade e a alegria de estarmos juntos.</p>
+
+      <div class="message" id="messagePreview">Você é meu melhor presente. Amo você hoje e sempre.</div>
+
+      <div class="controls">
+        <div style="min-width:220px">
+          <label for="name">Nome do seu amor</label>
+          <input id="name" type="text" placeholder="Digite o nome (ex: Ana)" />
+        </div>
+
+        <button class="btn" id="applyBtn">Atualizar Mensagem</button>
+        <button class="btn secondary" id="surpriseBtn">Mostrar Surpresa 🎁</button>
+        <button class="btn secondary" id="confettiBtn">Celebrar 🎊</button>
+      </div>
+    </div>
+
+    <div class="right" aria-hidden="false">
+      <div class="portrait" title="Dia dos Namorados">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#ff476f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M32 54s20-16 20-28a10 10 0 0 0-20 0 10 10 0 0 0-20 0c0 12 20 28 20 28z" fill="#ff476f"/>
+        </svg>
+      </div>
+
+      <div class="small-note">Toque em "Atualizar Mensagem" para personalizar</div>
+    </div>
+
+    <footer>Feito com 💖 — espalhe o amor!</footer>
+  </div>
+
+  <div class="confetti" id="confettiArea" aria-hidden="true"></div>
+
+<script>
+  const nameInput = document.getElementById('name');
+  const applyBtn = document.getElementById('applyBtn');
+  const loverName = document.getElementById('loverName');
+  const message = document.getElementById('messagePreview');
+  const surpriseBtn = document.getElementById('surpriseBtn');
+  const confettiBtn = document.getElementById('confettiBtn');
+  const confettiArea = document.getElementById('confettiArea');
+
+  applyBtn.addEventListener('click', () => {
+    const name = (nameInput.value || 'Amor').trim();
+    loverName.textContent = name;
+    message.textContent = `Querido(a) ${name}, meu coração é seu. Feliz Dia dos Namorados!`;
+    playChime();
+  });
+
+  const surprises = [
+    'Você é a razão do meu sorriso diário.',
+    'Cada momento contigo é inesquecível.',
+    'Obrigado(a) por ser meu(a) parceiro(a) de vida.'
+  ];
+  surpriseBtn.addEventListener('click', () => {
+    const s = surprises[Math.floor(Math.random()*surprises.length)];
+    alert(s);
+    playChime();
+  });
+
+  confettiBtn.addEventListener('click', () => {
+    launchConfetti(40);
+    playChime();
+  });
+
+  function launchConfetti(amount=30){
+    confettiArea.innerHTML = '';
+    const colors = ['#ff476f','#ff7a9b','#cc3650','#ff9aad','#ff2f61'];
+    for(let i=0;i<amount;i++){
+      const el = document.createElement('div');
+      el.className = 'piece';
+      el.style.left = Math.random()*100 + 'vw';
+      el.style.background = colors[i % colors.length];
+      el.style.width = (6 + Math.random()*10) + 'px';
+      el.style.height = (8 + Math.random()*12) + 'px';
+      el.style.top = (-10 - Math.random()*20) + 'vh';
+      el.style.animationDuration = (2 + Math.random()*2.5) + 's';
+      el.style.transform = `translateY(-20vh) rotate(${Math.random()*360}deg)`;
+      confettiArea.appendChild(el);
+      setTimeout(()=> el.remove(), 6000);
+    }
+  }
+
+  function playChime(){
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'triangle';
+      o.frequency.value = 580;
+      o.connect(g);
+      g.connect(ctx.destination);
+      g.gain.setValueAtTime(0, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.1);
+      o.stop(ctx.currentTime + 1.2);
+    } catch(e){ }
+  }
+
+  nameInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') applyBtn.click(); });
+
+  (function prefillFromQuery(){
+    const qs = new URLSearchParams(location.search);
+    const n = qs.get('name');
+    if(n){ nameInput.value = n; applyBtn.click(); }
+  })();
+</script>
+</body>
+</html>
