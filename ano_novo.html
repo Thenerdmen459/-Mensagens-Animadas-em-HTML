@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Feliz Ano Novo</title>
+<style>
+  :root{
+    --bg:#0d1f2d; --card:#12334a; --accent:#40c4ff; --muted:#a2cbdc;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  body{
+    display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(1200px 600px at 20% 20%, rgba(64,196,255,0.08), transparent),
+      radial-gradient(900px 400px at 80% 80%, rgba(10,73,123,0.06), transparent),
+      var(--bg);
+    color:#e1f0ff;
+    padding:24px;
+  }
+
+  .card{
+    width:min(920px,96vw);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:18px; padding:36px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    display:grid; grid-template-columns: 1fr 360px; gap:28px; align-items:center;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  @media (max-width:880px){
+    .card{grid-template-columns: 1fr; text-align:center}
+  }
+
+  .left h1{margin:0;font-size:2.1rem; letter-spacing: -0.02em;}
+  .left p{color:var(--muted); margin-top:12px; font-size:1rem; line-height:1.45}
+  .message{
+    margin-top:18px; background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:18px; border-radius:12px; font-size:1.05rem;
+  }
+
+  .controls{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+  .btn{
+    background:linear-gradient(180deg,var(--accent), #29a7f6);
+    border:none; padding:10px 14px; border-radius:10px; cursor:pointer; color:#072435;
+    font-weight:700; box-shadow: 0 6px 18px rgba(64,196,255,0.3);
+    min-width: 160px;
+  }
+  .btn.secondary{
+    background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); font-weight:600;
+  }
+
+  .right{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+
+  .portrait{
+    width:240px; height:240px; border-radius:20px; display:grid; place-items:center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    position:relative; overflow:hidden;
+  }
+  .portrait svg{width:55%; height:55%; opacity:0.9}
+
+  .small-note{color:var(--muted); font-size:0.9rem}
+
+  /* confetti */
+  .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden;}
+  .confetti .piece{
+    position:absolute; width:10px; height:14px; opacity:0.95; transform:translateY(-20vh) rotate(0deg);
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(120vh) rotate(720deg); opacity:1}
+  }
+
+  label{display:block; font-size:0.85rem; color:var(--muted); margin-bottom:6px}
+  input[type="text"]{
+    width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04);
+    background:transparent; color:inherit; outline:none;
+  }
+
+  footer{grid-column:1 / -1; text-align:center; margin-top:6px; color:var(--muted); font-size:0.85rem}
+</style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="title">
+    <div class="left">
+      <h1 id="title">Feliz Ano Novo, <span id="newYearName">Amigo</span>! 🎆</h1>
+      <p>Que o próximo ano traga novas oportunidades, saúde e muita felicidade para você.</p>
+
+      <div class="message" id="messagePreview">Vamos brindar a novos começos e conquistas inesquecíveis!</div>
+
+      <div class="controls">
+        <div style="min-width:220px">
+          <label for="name">Nome da pessoa</label>
+          <input id="name" type="text" placeholder="Digite o nome (ex: Júlia)" />
+        </div>
+
+        <button class="btn" id="applyBtn">Atualizar Mensagem</button>
+        <button class="btn secondary" id="surpriseBtn">Mostrar Surpresa 🎁</button>
+        <button class="btn secondary" id="confettiBtn">Celebrar 🎊</button>
+      </div>
+    </div>
+
+    <div class="right" aria-hidden="false">
+      <div class="portrait" title="Feliz Ano Novo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#40c4ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="32" cy="32" r="30"/>
+          <path d="M12 32h40M32 12v40"/>
+          <circle cx="32" cy="32" r="6" fill="#40c4ff"/>
+        </svg>
+      </div>
+
+      <div class="small-note">Toque em "Atualizar Mensagem" para personalizar</div>
+    </div>
+
+    <footer>Feito com ✨ — boas vibrações para o ano que vem!</footer>
+  </div>
+
+  <div class="confetti" id="confettiArea" aria-hidden="true"></div>
+
+<script>
+  const nameInput = document.getElementById('name');
+  const applyBtn = document.getElementById('applyBtn');
+  const newYearName = document.getElementById('newYearName');
+  const message = document.getElementById('messagePreview');
+  const surpriseBtn = document.getElementById('surpriseBtn');
+  const confettiBtn = document.getElementById('confettiBtn');
+  const confettiArea = document.getElementById('confettiArea');
+
+  applyBtn.addEventListener('click', () => {
+    const name = (nameInput.value || 'Amigo').trim();
+    newYearName.textContent = name;
+    message.textContent = `Querido ${name}, que o novo ano seja cheio de realizações, saúde e alegria. Feliz Ano Novo!`;
+    playChime();
+  });
+
+  const surprises = [
+    'Que 2025 seja incrível para você e sua família!',
+    'Novas metas, novas vitórias, novos sonhos.',
+    'Vamos celebrar o recomeço com alegria e esperança!'
+  ];
+  surpriseBtn.addEventListener('click', () => {
+    const s = surprises[Math.floor(Math.random()*surprises.length)];
+    alert(s);
+    playChime();
+  });
+
+  confettiBtn.addEventListener('click', () => {
+    launchConfetti(40);
+    playChime();
+  });
+
+  function launchConfetti(amount=30){
+    confettiArea.innerHTML = '';
+    const colors = ['#40c4ff','#a0d8ff','#007bb5','#38a2d4','#67c1ff'];
+    for(let i=0;i<amount;i++){
+      const el = document.createElement('div');
+      el.className = 'piece';
+      el.style.left = Math.random()*100 + 'vw';
+      el.style.background = colors[i % colors.length];
+      el.style.width = (6 + Math.random()*10) + 'px';
+      el.style.height = (8 + Math.random()*12) + 'px';
+      el.style.top = (-10 - Math.random()*20) + 'vh';
+      el.style.animationDuration = (2 + Math.random()*2.5) + 's';
+      el.style.transform = `translateY(-20vh) rotate(${Math.random()*360}deg)`;
+      confettiArea.appendChild(el);
+      setTimeout(()=> el.remove(), 6000);
+    }
+  }
+
+  function playChime(){
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'square';
+      o.frequency.value = 520;
+      o.connect(g);
+      g.connect(ctx.destination);
+      g.gain.setValueAtTime(0, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.1);
+      o.stop(ctx.currentTime + 1.2);
+    } catch(e){ }
+  }
+
+  nameInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') applyBtn.click(); });
+
+  (function prefillFromQuery(){
+    const qs = new URLSearchParams(location.search);
+    const n = qs.get('name');
+    if(n){ nameInput.value = n; applyBtn.click(); }
+  })();
+</script>
+</body>
+</html>
