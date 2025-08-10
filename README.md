@@ -19,3 +19,8 @@ Este repositório contém páginas HTML animadas para diferentes datas comemorat
 1. Baixe ou clone o repositório:
    ```bash
    git clone https://github.com/seu-usuario/mensagens-animadas-html.git
+
+
+## Criado com amor ❤️ para celebrar momentos especiais.
+
+📢 Sugestões de novas datas são bem-vindas via pull request!
